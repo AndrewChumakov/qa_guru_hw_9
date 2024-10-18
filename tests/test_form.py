@@ -2,31 +2,26 @@ import os
 
 from selene import browser, have
 
+from pages.registration_page import RegistrationPage
+CURRENT_FILE = os.path.abspath(__file__)
+DIRECTORY = os.path.dirname(CURRENT_FILE)
+FILE = os.path.join(DIRECTORY, "resources")
+
 
 def test_fill_form(browser_driver):
-    browser.open("/automation-practice-form")
-    browser.driver.execute_script("$('#fixedban').remove()")
-    browser.driver.execute_script("$('footer').remove()")
+    registration_page = RegistrationPage()
+    registration_page.open_page("/automation-practice-form")
+    registration_page.fill_first_name("First")
+    registration_page.fill_last_name("Last")
+    registration_page.fill_email("qwerty@test.ru")
+    registration_page.choose_gender("Female")
+    registration_page.fill_number("4567891230")
+    registration_page.choose_dirth_date("1990", "6", "14")
+    registration_page.choose_subject("h", "Hindi")
+    registration_page.choose_subject("m", "Maths")
+    registration_page.choose_hobby("Reading")
 
-    browser.element("#firstName").type("First")
-    browser.element("#lastName").type("Last")
-    browser.element("#userEmail").type("qwerty@test.ru")
-    # browser.element("[for='gender-radio-2']").click()
-    browser.all('[name="gender"]').element_by(have.attribute('value', 'Female')).element('../label').click()
-    browser.element("#userNumber").type("4567891230")
-    browser.element("#dateOfBirthInput").click()
-    browser.element(".react-datepicker__month-select").click()
-    browser.element("[value='6']").click()
-    browser.element(".react-datepicker__year-select").click()
-    browser.element("[value='1990']").click()
-    browser.element(".react-datepicker__day--014").click()
-    browser.element("#subjectsInput").type("h")
-    browser.element(".subjects-auto-complete__menu-list").element('//*[text()="Hindi"]').click()
-    browser.element("#subjectsInput").type("m")
-    browser.element(".subjects-auto-complete__menu-list").element('//*[text()="Maths"]').click()
-    # browser.element("[for='hobbies-checkbox-2']").click()
-    browser.element('//label[text()="Reading"]').click()
-    browser.element("#uploadPicture").send_keys(os.path.abspath("picture.png"))
+    browser.element("#uploadPicture").send_keys(os.path.abspath(f"{FILE}/picture.png"))
     browser.element("#currentAddress").type("Any address")
     browser.element("#state").click()
     browser.element("//*[text()='NCR']").click()
