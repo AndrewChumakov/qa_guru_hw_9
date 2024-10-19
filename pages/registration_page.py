@@ -1,4 +1,8 @@
+import os
+
 from selene import browser, have
+
+from tests.conftest import FILE
 
 
 class RegistrationPage:
@@ -36,3 +40,32 @@ class RegistrationPage:
 
     def choose_hobby(self, hobby):
         browser.element(f"//label[text()='{hobby}']").click()
+
+    def choose_picture(self, file_name):
+        browser.element("#uploadPicture").send_keys(os.path.abspath(f"{FILE}/{file_name}"))
+
+    def fill_address(self, address):
+        browser.element("#currentAddress").type(address)
+
+    def fill_state(self, state):
+        browser.element("#state").click()
+        browser.element(f"//*[text()='{state}']").click()
+
+    def fill_city(self, city):
+        browser.element("#city").click()
+        browser.element(f"//*[text()='{city}']").click()
+
+    def submit(self):
+        browser.element("#submit").click()
+
+    def should_have_registered(self, name, email, gender, number, date_birth, subjects, hobbies, picture, address, place):
+        browser.element("//table//td[text()='Student Name']/../td[2]").should(have.exact_text(name))
+        browser.element("//table//td[text()='Student Email']/../td[2]").should(have.exact_text(email))
+        browser.element("//table//td[text()='Gender']/../td[2]").should(have.exact_text(gender))
+        browser.element("//table//td[text()='Mobile']/../td[2]").should(have.exact_text(number))
+        browser.element("//table//td[text()='Date of Birth']/../td[2]").should(have.exact_text(date_birth))
+        browser.element("//table//td[text()='Subjects']/../td[2]").should(have.exact_text(subjects))
+        browser.element("//table//td[text()='Hobbies']/../td[2]").should(have.exact_text(hobbies))
+        browser.element("//table//td[text()='Picture']/../td[2]").should(have.exact_text(picture))
+        browser.element("//table//td[text()='Address']/../td[2]").should(have.exact_text(address))
+        browser.element("//table//td[text()='State and City']/../td[2]").should(have.exact_text(place))

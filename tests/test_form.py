@@ -1,11 +1,4 @@
-import os
-
-from selene import browser, have
-
 from pages.registration_page import RegistrationPage
-CURRENT_FILE = os.path.abspath(__file__)
-DIRECTORY = os.path.dirname(CURRENT_FILE)
-FILE = os.path.join(DIRECTORY, "resources")
 
 
 def test_fill_form(browser_driver):
@@ -20,23 +13,18 @@ def test_fill_form(browser_driver):
     registration_page.choose_subject("h", "Hindi")
     registration_page.choose_subject("m", "Maths")
     registration_page.choose_hobby("Reading")
-
-    browser.element("#uploadPicture").send_keys(os.path.abspath(f"{FILE}/picture.png"))
-    browser.element("#currentAddress").type("Any address")
-    browser.element("#state").click()
-    browser.element("//*[text()='NCR']").click()
-    browser.element("#city").click()
-    browser.element("//*[text()='Gurgaon']").click()
-
-    browser.element("#submit").click()
-
-    browser.element("//table//td[text()='Student Name']/../td[2]").should(have.exact_text("First Last"))
-    browser.element("//table//td[text()='Student Email']/../td[2]").should(have.exact_text("qwerty@test.ru"))
-    browser.element("//table//td[text()='Gender']/../td[2]").should(have.exact_text("Female"))
-    browser.element("//table//td[text()='Mobile']/../td[2]").should(have.exact_text("4567891230"))
-    browser.element("//table//td[text()='Date of Birth']/../td[2]").should(have.exact_text("14 July,1990"))
-    browser.element("//table//td[text()='Subjects']/../td[2]").should(have.exact_text("Hindi, Maths"))
-    browser.element("//table//td[text()='Hobbies']/../td[2]").should(have.exact_text("Reading"))
-    browser.element("//table//td[text()='Picture']/../td[2]").should(have.exact_text("picture.png"))
-    browser.element("//table//td[text()='Address']/../td[2]").should(have.exact_text("Any address"))
-    browser.element("//table//td[text()='State and City']/../td[2]").should(have.exact_text("NCR Gurgaon"))
+    registration_page.choose_picture("picture.png")
+    registration_page.fill_address("Any address")
+    registration_page.fill_state("NCR")
+    registration_page.fill_city("Gurgaon")
+    registration_page.submit()
+    registration_page.should_have_registered("First Last",
+                                             "qwerty@test.ru",
+                                             "Female",
+                                             "4567891230",
+                                             "14 July,1990",
+                                             "Hindi, Maths",
+                                             "Reading",
+                                             "picture.png",
+                                             "Any address",
+                                             "NCR Gurgaon")
