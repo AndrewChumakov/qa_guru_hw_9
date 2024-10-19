@@ -9,7 +9,7 @@ def test_fill_form(browser_driver):
     registration_page.fill_email("qwerty@test.ru")
     registration_page.choose_gender("Female")
     registration_page.fill_number("4567891230")
-    registration_page.choose_dirth_date("1990", "6", "14")
+    registration_page.choose_birth_date("1990", "6", "14")
     registration_page.choose_subject("h", "Hindi")
     registration_page.choose_subject("m", "Maths")
     registration_page.choose_hobby("Reading")

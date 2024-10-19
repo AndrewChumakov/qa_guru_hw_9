@@ -26,7 +26,7 @@ class RegistrationPage:
     def fill_number(self, number):
         browser.element("#userNumber").type(number)
 
-    def choose_dirth_date(self, year, month, day):
+    def choose_birth_date(self, year, month, day):
         browser.element("#dateOfBirthInput").click()
         browser.element(".react-datepicker__month-select").click()
         browser.element(f"[value='{month}']").click()
