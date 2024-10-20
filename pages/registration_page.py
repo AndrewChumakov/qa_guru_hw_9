@@ -2,14 +2,21 @@ import os
 
 from selene import browser, have
 
-from tests.conftest import FILE
-
+CURRENT_FILE = os.path.abspath(__file__)
+DIRECTORY = os.path.dirname(CURRENT_FILE)
+FILE = os.path.join(DIRECTORY, "..", "resources")
 
 class RegistrationPage:
     def open_page(self, page):
         browser.open(page)
+
+    def remove_banner(self):
         browser.driver.execute_script("$('#fixedban').remove()")
         browser.driver.execute_script("$('footer').remove()")
+
+    def open_page_without_banners(self, page):
+        self.open_page(page)
+        self.remove_banner()
 
     def fill_first_name(self, first_name):
         browser.element("#firstName").type(first_name)
@@ -20,28 +27,31 @@ class RegistrationPage:
     def fill_email(self, email):
         browser.element("#userEmail").type(email)
 
-    def choose_gender(self, gender):
+    def set_gender(self, gender):
         browser.all("[name='gender']").element_by(have.attribute("value", gender)).element("../label").click()
 
-    def fill_number(self, number):
-        browser.element("#userNumber").type(number)
+    def fill_mobile(self, mobele_number):
+        browser.element("#userNumber").type(mobele_number)
 
-    def choose_birth_date(self, year, month, day):
+    def set_birth_date(self, year, month, day):
         browser.element("#dateOfBirthInput").click()
         browser.element(".react-datepicker__month-select").click()
         browser.element(f"[value='{month}']").click()
         browser.element(".react-datepicker__year-select").click()
         browser.element(f"[value='{year}']").click()
-        browser.element(f".react-datepicker__day--0{day}").click()
+        if len(day) == 2:
+            browser.element(f".react-datepicker__day--0{day}").click()
+        else:
+            browser.element(f".react-datepicker__day--00{day}").click()
 
-    def choose_subject(self, short_subject, subject):
-        browser.element("#subjectsInput").type(short_subject)
+    def set_subject(self, subject):
+        browser.element("#subjectsInput").type(subject[0].lower())
         browser.element(".subjects-auto-complete__menu-list").element(f"//*[text()='{subject}']").click()
 
-    def choose_hobby(self, hobby):
+    def set_hobby(self, hobby):
         browser.element(f"//label[text()='{hobby}']").click()
 
-    def choose_picture(self, file_name):
+    def set_picture(self, file_name):
         browser.element("#uploadPicture").send_keys(os.path.abspath(f"{FILE}/{file_name}"))
 
     def fill_address(self, address):

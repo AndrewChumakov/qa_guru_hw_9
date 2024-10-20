@@ -4,10 +4,6 @@ import pytest
 from selene import browser
 from selenium import webdriver
 
-CURRENT_FILE = os.path.abspath(__file__)
-DIRECTORY = os.path.dirname(CURRENT_FILE)
-FILE = os.path.join(DIRECTORY, "..", "resources")
-
 
 @pytest.fixture(scope="function", autouse=True)
 def browser_driver():
