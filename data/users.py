@@ -1,7 +1,5 @@
 import dataclasses
 
-from future.backports.http.cookiejar import month
-
 
 @dataclasses.dataclass
 class User:
@@ -25,7 +23,7 @@ user = User(
     email="qwerty@test.ru",
     gender="Female",
     number="4567891230",
-    birthday_date={"month_number": "6", "month": "July", "year": "1990", "day": "14"},
+    birthday_date={"month_number": "6", "month": "July", "year": "1990", "day": "04"},
     subject=["Hindi", "Maths"],
     hobby="Reading",
     picture="picture.png",

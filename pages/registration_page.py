@@ -3,14 +3,23 @@ import os
 from selene import browser, have
 
 from data.users import User
-from tests.conftest import FILE
+
+CURRENT_FILE = os.path.abspath(__file__)
+DIRECTORY = os.path.dirname(CURRENT_FILE)
+FILE = os.path.join(DIRECTORY, "..", "resources")
 
 
 class RegistrationPage:
     def open_page(self, page):
         browser.open(page)
+
+    def remove_banner(self):
         browser.driver.execute_script("$('#fixedban').remove()")
         browser.driver.execute_script("$('footer').remove()")
+
+    def open_page_without_banners(self, page):
+        self.open_page(page)
+        self.remove_banner()
 
     def _fill_first_name(self, first_name):
         browser.element("#firstName").type(first_name)
@@ -21,13 +30,13 @@ class RegistrationPage:
     def _fill_email(self, email):
         browser.element("#userEmail").type(email)
 
-    def _choose_gender(self, gender):
+    def _set_gender(self, gender):
         browser.all("[name='gender']").element_by(have.attribute("value", gender)).element("../label").click()
 
-    def _fill_number(self, number):
-        browser.element("#userNumber").type(number)
+    def _fill_mobile_number(self, mobile_number):
+        browser.element("#userNumber").type(mobile_number)
 
-    def _choose_birth_date(self, year, month, day):
+    def _set_birth_date(self, year, month, day):
         browser.element("#dateOfBirthInput").click()
         browser.element(".react-datepicker__month-select").click()
         browser.element(f"[value='{month}']").click()
@@ -35,14 +44,14 @@ class RegistrationPage:
         browser.element(f"[value='{year}']").click()
         browser.element(f".react-datepicker__day--0{day}").click()
 
-    def _choose_subject(self, short_subject, subject):
-        browser.element("#subjectsInput").type(short_subject)
+    def _set_subject(self, subject):
+        browser.element("#subjectsInput").type(subject[0].lower())
         browser.element(".subjects-auto-complete__menu-list").element(f"//*[text()='{subject}']").click()
 
-    def _choose_hobby(self, hobby):
+    def _set_hobby(self, hobby):
         browser.element(f"//label[text()='{hobby}']").click()
 
-    def _choose_picture(self, file_name):
+    def _set_picture(self, file_name):
         browser.element("#uploadPicture").send_keys(os.path.abspath(f"{FILE}/{file_name}"))
 
     def _fill_address(self, address):
@@ -63,14 +72,14 @@ class RegistrationPage:
         self._fill_first_name(user.first_name)
         self._fill_last_name(user.last_name)
         self._fill_email(user.email)
-        self._choose_gender(user.gender)
-        self._fill_number(user.number)
-        self._choose_birth_date(user.birthday_date["year"], user.birthday_date["month_number"],
-                                user.birthday_date["day"])
+        self._set_gender(user.gender)
+        self._fill_mobile_number(user.number)
+        self._set_birth_date(user.birthday_date["year"], user.birthday_date["month_number"],
+                             user.birthday_date["day"])
         for subject in user.subject:
-            self._choose_subject(subject[0], subject)
-        self._choose_hobby(user.hobby)
-        self._choose_picture(user.picture)
+            self._set_subject(subject)
+        self._set_hobby(user.hobby)
+        self._set_picture(user.picture)
         self._fill_address(user.address)
         self._fill_state(user.state)
         self._fill_city(user.city)
