@@ -6,6 +6,7 @@ CURRENT_FILE = os.path.abspath(__file__)
 DIRECTORY = os.path.dirname(CURRENT_FILE)
 FILE = os.path.join(DIRECTORY, "..", "resources")
 
+
 class RegistrationPage:
     def open_page(self, page):
         browser.open(page)
@@ -68,7 +69,8 @@ class RegistrationPage:
     def submit(self):
         browser.element("#submit").click()
 
-    def should_have_registered(self, name, email, gender, number, date_birth, subjects, hobbies, picture, address, place):
+    def should_have_registered(self, name, email, gender, number, date_birth, subjects, hobbies, picture, address,
+                               place):
         browser.element("//table//td[text()='Student Name']/../td[2]").should(have.exact_text(name))
         browser.element("//table//td[text()='Student Email']/../td[2]").should(have.exact_text(email))
         browser.element("//table//td[text()='Gender']/../td[2]").should(have.exact_text(gender))
